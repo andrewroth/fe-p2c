@@ -123,7 +123,7 @@ module Fe
 
     # shortcut to return first answer
     def response(answer_sheet)
-      responses(answer_sheet).first.to_s
+      responses(answer_sheet).first
     end
 
     def display_response(answer_sheet)

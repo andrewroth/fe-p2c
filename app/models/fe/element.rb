@@ -240,6 +240,7 @@ module Fe
           when "Fe::ProjectPreference" then self.style ||= "project_preference"
           when "Fe::StateChooser" then self.style ||= "state_chooser"
           when "Fe::ReferenceQuestion" then self.style ||= "peer"
+          when "Fe::AddressField" then self.style ||= "address"
           else
             self.style ||= self.class.to_s.underscore
         end

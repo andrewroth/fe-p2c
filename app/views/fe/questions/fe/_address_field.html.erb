@@ -1,0 +1,12 @@
+<% address = address_field.response(@answer_sheet) %>
+<% address ||= Fe::Address.new %>
+<% css_class = address_field.required?(@answer_sheet, @page) ? 'required' : '' %>
+<%#= hidden_field_tag "reference[#{reference.id}]", :class => reference_question.required? && !reference.email_sent? ? 'required' : '' %>
+<div id="<%= dom_id(address_field) %>" class="address_field">
+  <ul class="address level1">
+    <li>
+      <label for="<%= "name_#{address_field}" %>" class="desc">Street</label>
+      <%= text_field_tag "address[#{address_field.id}][street]", address.street, :class => "text #{css_class}", :id => "name_#{address.id}", :readonly => !@answer_sheet.try(:can_change_references?), :disabled => !@answer_sheet.try(:can_change_references?)  %>
+    </li>
+  </ul>
+</div>

@@ -3,10 +3,92 @@
 <% css_class = address_field.required?(@answer_sheet, @page) ? 'required' : '' %>
 <%#= hidden_field_tag "reference[#{reference.id}]", :class => reference_question.required? && !reference.email_sent? ? 'required' : '' %>
 <div id="<%= dom_id(address_field) %>" class="address_field">
-  <ul class="address level1">
+  <ul class="address_div">
     <li>
-      <label for="<%= "name_#{address_field}" %>" class="desc">Street</label>
-      <%= text_field_tag "address[#{address_field.id}][street]", address.street, :class => "text #{css_class}", :id => "name_#{address.id}", :readonly => !@answer_sheet.try(:can_change_references?), :disabled => !@answer_sheet.try(:can_change_references?)  %>
+      <label for="<%= "name_#{address_field}" %>" class="desc">Input here</label>
+      <%= text_field_tag "address[#{address_field.id}][address1]", address.address1, :class => "text #{css_class} autocomplete",
+                         :id => "autocomplete_#{address.id}", :readonly => !@answer_sheet.try(:can_change_references?), :disabled => !@answer_sheet.try(:can_change_references?)  %>
+    </li>
+
+    <li>
+      <label for="<%= "name_#{address_field}" %>" class="desc">Street address</label>
+      <%= text_field_tag "address[#{address_field.id}][address2]", address.address2, :class => "text #{css_class} address1",
+                         :id => "street_#{address.id}", :readonly => !@answer_sheet.try(:can_change_references?), :disabled => true %>
+    </li>
+
+    <li>
+      <label for="<%= "name_#{address_field}" %>" class="desc">City</label>
+      <%= text_field_tag "address[#{address_field.id}][city]", address.city, :class => "text #{css_class} city",
+                         :id => "city_#{address.id}", :readonly => !@answer_sheet.try(:can_change_references?), :disabled => true %>
+    </li>
+
+    <li>
+      <label for="<%= "name_#{address_field}" %>" class="desc">State</label>
+      <%= text_field_tag "address[#{address_field.id}][state]", address.state, :class => "text #{css_class} state",
+                         :id => "state_#{address.id}", :readonly => !@answer_sheet.try(:can_change_references?), :disabled => true %>
+    </li>
+
+    <li>
+      <label for="<%= "name_#{address_field}" %>" class="desc">Zip Code</label>
+      <%= text_field_tag "address[#{address_field.id}][zip]", address.zip, :class => "text #{css_class} zip",
+                         :id => "zip_#{address.id}", :readonly => !@answer_sheet.try(:can_change_references?), :disabled => true %>
+    </li>
+
+    <li>
+      <label for="<%= "name_#{address_field}" %>" class="desc">Country</label>
+      <%= text_field_tag "address[#{address_field.id}][country]", address.country, :class => "text #{css_class} country",
+                         :id => "country_#{address.id}", :readonly => !@answer_sheet.try(:can_change_references?), :disabled => true %>
     </li>
   </ul>
 </div>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+
+<script>
+    var fillInAddress, registerAutocompleteAddress;
+
+    fillInAddress = function ()
+    {
+        var addressType, address_div, i, parsedPlace, place;
+        place = this.getPlace();
+        i = 0;
+        parsedPlace =
+        {
+            street_number: '',
+            route: '',
+            locality: '',
+            administrative_area_level_1: '',
+            country: '',
+            postal_code: ''
+        };
+        while (i < place.address_components.length)
+        {
+            addressType = place.address_components[i].types[0];
+            parsedPlace[addressType] = place.address_components[i].short_name;
+            i++;
+        }
+        address_div = $(this.target).closest('.address_div');
+        address_div.find('.address1').val(parsedPlace.street_number + " " + parsedPlace.route);
+        address_div.find('.city').val(parsedPlace.locality);
+        address_div.find('.state').val(parsedPlace.administrative_area_level_1);
+        address_div.find('.country').val(parsedPlace.country);
+        address_div.find('.zip').val(parsedPlace.postal_code);
+    };
+
+    registerAutocompleteAddress = function (elm)
+    {
+        var autocomplete;
+        autocomplete = new google.maps.places.Autocomplete(elm,
+                {
+                    types: ['address']
+                });
+        autocomplete.target = elm;
+        return google.maps.event.addListener(autocomplete, 'place_changed', fillInAddress);
+    };
+    registerAutocompleteAddress($('#autocomplete_<%= address.id %>')[0]);
+    $('.contact_addresses_wrapper .add_field').click(function ()
+    {
+        var new_address_field;
+        new_address_field = $('.contact_addresses_wrapper .address_field').last();
+        return registerAutocompleteAddress(new_address_field.find('input[type="text"]')[0]);
+    });
+</script>

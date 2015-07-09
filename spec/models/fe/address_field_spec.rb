@@ -6,14 +6,14 @@ describe Fe::AddressField do
   #if the address field style chosen to be default, then use google maps autocomplete
   describe '#ptemplate' do
     it 'default style' do
-      addre = Fe::AddressField.new
-      expect(addre.ptemplate).to eq("fe/text_field")
+      sc = Fe::AddressField.new
+      expect(sc.ptemplate).to eq("fe/text_field")
     end
   #if
     it 'essay style' do
-      addre = Fe::AddressField.new
-      addre.style = "essay"
-      expect(addre.ptemplate).to eq("fe/text_area_field")
+      sc = Fe::AddressField.new
+      sc.style = "essay"
+      expect(sc.ptemplate).to eq("fe/text_area_field")
     end
   end
 end

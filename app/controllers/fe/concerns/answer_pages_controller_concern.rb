@@ -27,6 +27,16 @@ module Fe::AnswerPagesControllerConcern
     @elements = questions.elements
 
     # Save references
+    if params[:address].present?
+      params[:address].keys.each do |id|
+        address_params = params.fetch(:address)[id].permit(:address1, :address2, :city, :state, :zip, :country)
+
+        sc = current_user.person.current_address
+        # if the email address has changed, we have to trash the old reference answers
+        sc.attributes = address_params
+        sc.save(:validate => false)
+      end
+    end
 
     if params[:reference].present?
       params[:reference].keys.each do |id|

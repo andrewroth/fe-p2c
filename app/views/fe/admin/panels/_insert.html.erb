@@ -32,7 +32,7 @@
     <%#- unless Fe::Form.respond_to?(:no_refs) && Fe::Form.no_refs -%>
     <li id="ref"><%= link_to "Reference", new_fe_admin_question_sheet_page_element_path(route.merge(:element_type => "Fe::ReferenceQuestion", :human_type => 'Reference')),
                              :remote => true %></li>
-    <li id="addre"><%= link_to "Address", new_fe_admin_question_sheet_page_element_path(route.merge(:element_type => "Fe::AddressField", :human_type => 'Address')),
+    <li id="sc"><%= link_to "Address", new_fe_admin_question_sheet_page_element_path(route.merge(:element_type => "Fe::AddressField", :human_type => 'Address')),
                                :remote => true%></li>
     <%#- end -%>
 

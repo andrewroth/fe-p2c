@@ -117,16 +117,36 @@ module Fe
 
     def complete?(answer_sheet)
       return true if hidden?(answer_sheet)
-      prev_el = nil
+
       all_elements.all? {|e|
-        complete = !e.required?(answer_sheet, self, prev_el) || e.has_response?(answer_sheet)
-        prev_el = e
-        complete
+        e.hidden?(answer_sheet, self) || !e.required?(answer_sheet, self) || e.has_response?(answer_sheet)
       }
     end
 
     def started?(answer_sheet)
       all_questions.any? {|e| e.has_response?(answer_sheet)}
+    end
+
+    def all_hidden_elements(answer_sheet)
+      @all_hidden_elements ||= {}
+      @all_hidden_elements[answer_sheet] ||= build_all_hidden_elements(answer_sheet)
+    end
+
+    def build_all_hidden_elements(answer_sheet)
+      @all_hidden_elements ||= {}
+      @all_hidden_elements[answer_sheet] = []
+      all_elements.each do |e|
+        next if @all_hidden_elements[answer_sheet].include?(e)
+        if e.hidden_by_choice_field?(answer_sheet) || e.hidden_by_conditional?(answer_sheet, self)
+          @all_hidden_elements[answer_sheet] += ([e] + e.all_elements)
+          @all_hidden_elements[answer_sheet].uniq!
+        end
+      end
+      @all_hidden_elements[answer_sheet]
+    end
+
+    def clear_all_hidden_elements
+      @all_hidden_elements = nil
     end
 
     private

@@ -179,6 +179,7 @@
                  },
                  success: function (xhr) {
                    page.data('save_fails', 0)
+                   $(document).trigger('fePageSaved'); // allow other code to handle save event by using $(document).on('fePageSaved', function() { ... });
                  },
                  error: function() {
                    save_fails = page.data('save_fails') == null ? 0 : page.data('save_fails');

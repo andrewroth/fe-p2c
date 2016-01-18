@@ -3,9 +3,18 @@ module Fe::AnswerPagesControllerConcern
 
   begin
     included do
-      before_filter :get_answer_sheet, :only => [:edit, :update, :save_file, :index]
+      before_action :get_answer_sheet, :only => [:show, :edit, :update, :save_file, :index]
+      before_action :set_quiet_reference_email_change, only: :update
     end
   rescue ActiveSupport::Concern::MultipleIncludedBlocks
+  end
+
+  def show
+    @presenter = Fe::AnswerPagesPresenter.new(self, @answer_sheet, params[:a], nil, true)
+    questions = @presenter.questions_for_page(params[:id])
+    questions.set_filter(get_filter)
+    @elements = questions.elements
+    @page = Fe::Page.find(params[:id]) || Fe::Page.find_by_number(1)
   end
 
   def edit
@@ -43,7 +52,7 @@ module Fe::AnswerPagesControllerConcern
     end
     @presenter.active_page = nil
     @answer_sheet.update(locale: session[:locale])
-    @saved_at_timestamp = [@answer_sheet.updated_at, @answer_sheet.answers.maximum(:updated_at)].compact.max
+    set_saved_at_timestamp
     respond_to do |format|
       format.js
       #format.html
@@ -61,6 +70,7 @@ module Fe::AnswerPagesControllerConcern
       question.answers = [answer] if answer
 
       @answer = question.save_file(@answer_sheet, params[:Filedata])
+      set_saved_at_timestamp
 
       render action: :update
     else
@@ -88,5 +98,13 @@ module Fe::AnswerPagesControllerConcern
 
   def answer_params
     params.fetch(:answers, {}).permit!
+  end
+
+  def set_saved_at_timestamp
+    @saved_at_timestamp = [@answer_sheet.updated_at, @answer_sheet.answers.maximum(:updated_at)].compact.max
+  end
+
+  def set_quiet_reference_email_change
+    @answer_sheet.allow_quiet_reference_email_changes = true if @answer_sheet.is_a?(Fe::ReferenceSheet) && params[:a].present?
   end
 end

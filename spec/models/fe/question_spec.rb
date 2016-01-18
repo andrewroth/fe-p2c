@@ -18,4 +18,53 @@ describe Fe::Question do
     end
   end
   
+  context 'slug' do
+    let(:qs) { create(:question_sheet_with_pages) }
+    let(:page) { qs.pages.first }
+    let(:qs2) { create(:question_sheet_with_pages) }
+    let(:page2) { qs2.pages.first }
+    let(:e1) { create(:text_field_element, slug: 'test') }
+    let(:e2) { create(:text_field_element) }
+
+    before do
+      e1.pages << page
+    end
+
+    it "doesn't let the same slug be used in the question sheet" do
+      e2.pages << page
+      e2.slug = 'test'
+      e2.save
+      expect(e2.errors.full_messages.join(', ')).to include('Slug must be unique (within the question sheet)')
+    end
+    it "lets two elements with the same slug save on different sheets" do
+      e2.pages << page2
+      e2.slug = 'test'
+      expect(e2.save).to be true
+    end
+  end
+
+  context 'saving' do
+    let(:e) { create(:text_field_element) }
+    let(:app) { create(:text_field_element) }
+    let(:app2) { create(:text_field_element) }
+
+    before do
+      e.set_response('answer value', app)
+    end
+
+    context '#save_file' do
+      it ' checks that the answer sheet that calls set_response is the same one that calls save' do
+        expect {
+          e.save_file(app2, nil)
+        }.to raise_error(RuntimeError, "Trying to save answers to a different answer sheet than the one given in set_response")
+      end
+    end
+    context '#save_response' do
+      it ' checks that the answer sheet that calls set_response is the same one that calls save' do
+        expect {
+          e.save_response(app2)
+        }.to raise_error(RuntimeError, "Trying to save answers to a different answer sheet than the one given in set_response")
+      end
+    end
+  end
 end

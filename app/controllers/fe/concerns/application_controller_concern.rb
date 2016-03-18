@@ -24,6 +24,9 @@ module Fe::ApplicationControllerConcern
   end
 
   def set_locale
+    if Rails.env.test?
+      params[:locale] = :en
+    end
     session[:locale] = params[:locale] if params[:locale]
     session[:locale] ||= extract_locale_from_accept_language_header || I18n.default_locale
     if @answer_sheet

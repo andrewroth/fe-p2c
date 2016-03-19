@@ -8,7 +8,7 @@ describe Fe::AnswerPagesController, type: :controller do
     it 'should work' do
       question_sheet = page.question_sheet
       create(:answer_sheet_question_sheet, answer_sheet: answer_sheet, question_sheet: question_sheet)
-      get :edit, id: page.id, answer_sheet_id: answer_sheet.id
+      get :edit, id: page.id, answer_sheet_id: answer_sheet.id, locale: :en
       expect(response).to render_template('fe/answer_pages/_answer_page')
     end
     context 'filtering' do

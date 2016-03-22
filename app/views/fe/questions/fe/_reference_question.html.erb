@@ -8,15 +8,15 @@
   <ul class="questions level1">
     <li>
     <label for="<%= "name_#{reference.id}" %>" class="desc"><%= _('First Name') %></label>
-      <%= text_field_tag "reference[#{reference.id}][first_name]", reference.first_name, :class => "text #{css_class}", :id => "name_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
+      <%= text_field_tag "reference[#{reference.id}][first_name]", reference.first_name, :class => "form-control text #{css_class}", :id => "name_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
     </li>
     <li>
     <label for="<%= "name_#{reference.id}" %>" class="desc"><%= _('Last Name') %> </label>
-      <%= text_field_tag "reference[#{reference.id}][last_name]", reference.last_name, :class => "text #{css_class}", :id => "name_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
+      <%= text_field_tag "reference[#{reference.id}][last_name]", reference.last_name, :class => "form-control text #{css_class}", :id => "name_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
     </li>
     <li>
     <label for="<%= "name_#{reference.id}" %>" class="desc"><%= _('Relationship to You') %></label>
-      <%= text_field_tag "reference[#{reference.id}][relationship]", reference.relationship, :class => "text #{css_class}", :id => "name_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
+      <%= text_field_tag "reference[#{reference.id}][relationship]", reference.relationship, :class => "form-control text #{css_class}", :id => "name_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
     </li>
     <li>
     <label for="<%= "email_#{reference.id}" %>" class="desc"><%= _('E-mail') %></label>
@@ -25,11 +25,11 @@
           <%= _('Please be aware that any changes to this email address after your reference has started filling out their form will cause their answers to be lost.') %>
         </div>
       <% end %>
-      <%= text_field_tag "reference[#{reference.id}][email]", reference.email, :class => "text #{email_css_class}", :id => "email_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
+      <%= text_field_tag "reference[#{reference.id}][email]", reference.email, :class => "form-control text #{email_css_class}", :id => "email_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
     </li>
     <li>
     <label for="<%= "phone_#{reference.id}" %>" class="desc"><%= _('Phone') %></label>
-      <%= text_field_tag "reference[#{reference.id}][phone]", reference.phone, :class => "text #{phone_css_class}", :id => "phone_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
+      <%= text_field_tag "reference[#{reference.id}][phone]", reference.phone, :class => "form-control text #{phone_css_class}", :id => "phone_#{reference.id}", :readonly => reference.completed? || !@answer_sheet.try(:can_change_references?), :disabled => reference.completed? || !@answer_sheet.try(:can_change_references?) %>
     </li>
     <li>
       <% if reference.completed? %>

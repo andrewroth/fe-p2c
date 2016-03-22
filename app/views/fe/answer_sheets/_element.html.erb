@@ -53,7 +53,7 @@
 <% else %>
   <li>
     <% if element.question? -%>
-      <label class="desc"><%= raw element.label %></label>
+      <label style='float: left;' class="desc"><%= raw element.label %></label>
       <%- if @collating -%>
         <%- for answer_sheet in @collated_answer_sheets[@answer_sheet] -%>
           <div class="answer collate">

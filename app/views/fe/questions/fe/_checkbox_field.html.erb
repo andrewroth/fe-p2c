@@ -37,14 +37,14 @@
          css_class += checkbox_field.validation_class(@answer_sheet) if last_choice
       %>
       <%= hidden_field_tag "answers[#{checkbox_field.id}][#{num}]", '', :id => '' %>
-      <div class="field field_check">
+      <div class="field field_check" style='margin-left: auto; margin-right: auto; width: 80%;'>
       <%= check_box_tag "answers[#{checkbox_field.id}][#{num}]", choice[1],
           checkbox_field.has_answer?(choice[1], @answer_sheet),
           :id => dom_id,
           :class => css_class,
           :disabled => @answer_sheet.frozen?&&!@presenter.try(:reference?),
           :readonly => @answer_sheet.frozen?&&!@presenter.try(:reference?) %>
-      <label class="choice" for="<%= dom_id %>"><%= choice[0] %></label>
+      <label class="choice" style='float:left;' for="<%= dom_id %>"><%= choice[0] %></label><br><br>
     </div>
   <% end -%>
   </div>

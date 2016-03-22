@@ -2,9 +2,9 @@
   <% page_dom = @presenter.active_page_link.dom_id
      next_js = load_page_js(@presenter.next_page) -%>
 
-  <div id="<%= page_dom %>" class="answer-page" style="<% if show_first.nil? -%>display: none;<% end -%>">  <!-- this id is parsed by fe.public.js -->
+  <div id="<%= page_dom %>" class="" style="<% if show_first.nil? -%>display: none;<% end -%>">  <!-- this id is parsed by fe.public.js -->
 
-    <div class="page">
+    <div class="">
       <%= render "fe/answer_pages/page_name" %>
 
       <% if @elements.length > 0 -%>
@@ -31,8 +31,8 @@
               <%= _('Last Saved:') %> <span class="last-saved"><%= l(@answer_sheet.updated_at, :format => :datetime) %></span><%= spinner(page_dom) %>
             </div>
             <div>
-              <button type="button" class="button no-left-margin save_button"><%= _('Save Now') %></button>
-              <button type="button" class="button cru-gold" onclick="<%= next_js %>"><%= _('Next >>') %></button>
+              <button type="button" class="btn btn-primary no-left-margin save_button"><%= _('Save Now') %></button>
+              <button type="button" class="btn btn-info cru-gold" onclick="<%= next_js %>"><%= _('Next >>') %></button>
             </div>
           <% end -%>
         <% end -%>

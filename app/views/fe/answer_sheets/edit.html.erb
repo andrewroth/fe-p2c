@@ -3,19 +3,21 @@
     The administrator has not set up this questionnaire yet.
   </div>
 <% else %>
-  <div id="controls">
-    <div id="panel">
-      <%= render :partial => 'fe/answer_sheets/pages_list' %>
+  <div class='row'>
+    <div id="" class="col-md-4 col-xs-12">
+      <div id="">
+        <%= render :partial => 'fe/answer_sheets/pages_list' %>
+      </div>
+      <div id="">
+        <%= image_tag('fe/icons/question-balloon.png') %> <%= _('Rolling over this symbol gives you help') %><br/>
+        <%= image_tag('fe/icons/star-small.png') %> <%= _('Marks a required field') %>
+      </div>
     </div>
-    <div id="legend">
-      <%= image_tag('fe/icons/question-balloon.png') %> <%= _('Rolling over this symbol gives you help') %><br/>
-      <%= image_tag('fe/icons/star-small.png') %> <%= _('Marks a required field') %>
-    </div>
-  </div>
 
-  <div id="preview">
-      <%= render :partial => 'fe/answer_sheets/title' %>
-      <%= render :partial => 'fe/answer_pages/answer_page', :locals => { :show_first => true } %>
+    <div id="" class="col-md-8 col-xs-12 text-center">
+        <%= render :partial => 'fe/answer_sheets/title' %>
+        <%= render :partial => 'fe/answer_pages/answer_page', :locals => { :show_first => true } %>
+    </div>
   </div>
 
   <script type="text/javascript">

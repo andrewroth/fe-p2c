@@ -106,6 +106,7 @@ module Fe::AnswerPagesControllerConcern
   end
 
   def answer_sheet_type
+    puts 'XXXXXXXXXX' + Fe.answer_sheet_class
     (params[:answer_sheet_type] || Fe.answer_sheet_class || 'AnswerSheet').constantize
   end
 

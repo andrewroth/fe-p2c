@@ -11,7 +11,6 @@ module Fe::AnswerSheetsControllerConcern
 
   # list existing answer sheets
   def index
-    puts answer_sheet_type
     @answer_sheets = answer_sheet_type.order('created_at')
 
     # drop down of sheets to capture data for

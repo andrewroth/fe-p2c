@@ -2,7 +2,7 @@
   <% page_dom = @presenter.active_page_link.dom_id
      next_js = load_page_js(@presenter.next_page) -%>
 
-  <div id="<%= page_dom %>" class="" style="<% if show_first.nil? -%>display: none;<% end -%>">  <!-- this id is parsed by fe.public.js -->
+  <div id="<%= page_dom %>" class="answer-page" style="<% if show_first.nil? -%>display: none;<% end -%>">  <!-- this id is parsed by fe.public.js -->
 
     <div class="">
       <%= render "fe/answer_pages/page_name" %>

@@ -23,7 +23,7 @@
           <% if next_js.empty? -%>
             <div id="submit_message" class="validation-advice" style="display: none;"></div>
             <div>
-              <h5><%= _('Once you have submitted your answers, you may return to your dashboard, by ') %> <a> <%= _('clicking here') %> </a> </h5>
+              <h5><%= _('Once you have submitted your answers, you may return to your dashboard, by ') %> <a href='/' > <%= _('clicking here') %> </a> </h5>
               <button type="button" class="button save_button"><%= _('Save Now') %></button>
               <button type="submit" class="button cru-gold no-left-margin" onclick="page_handler.completeAll(); return false;" id="submit_button"><%= _('Submit') %></button>
             </div>

@@ -57,7 +57,6 @@ module Fe
 
     def error_messages_for(model)
       record = instance_variable_get(:"@#{(model.is_a?(ActiveRecord::Base) ? model.class : model).to_s.underscore}")
-      render "layouts/fe/error_messages_for", record: record
     end
   end
 end

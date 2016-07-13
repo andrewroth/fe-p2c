@@ -3,7 +3,6 @@ module Fe::AnswerSheetsControllerConcern
 
   begin
     included do
-      layout 'fe/application'
       before_filter :get_answer_sheet, :only => [:edit, :show, :send_reference_invite, :submit]
     end
   rescue ActiveSupport::Concern::MultipleIncludedBlocks
@@ -32,8 +31,6 @@ module Fe::AnswerSheetsControllerConcern
       flash[:error] = "Sorry, there are no questions for this form yet."
       if request.env["HTTP_REFERER"]
         redirect_to :back
-      else
-        render :text => "", :layout => true
       end
     else
       @elements = @presenter.questions_for_page(:first).elements

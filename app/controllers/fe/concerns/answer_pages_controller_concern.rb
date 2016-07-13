@@ -53,10 +53,10 @@ module Fe::AnswerPagesControllerConcern
     @presenter.active_page = nil
     @answer_sheet.update(locale: session[:locale])
     set_saved_at_timestamp
-    respond_to do |format|
-      format.js
-      #format.html
-    end
+#    respond_to do |format|
+#      format.js
+#      #format.html
+#    end
   end
 
   def save_file
@@ -74,9 +74,9 @@ module Fe::AnswerPagesControllerConcern
 
       render action: :update
     else
-      respond_to do |format|
-        format.js { head :ok }
-      end
+#      respond_to do |format|
+#        format.js { head :ok }
+#      end
     end
   end
 

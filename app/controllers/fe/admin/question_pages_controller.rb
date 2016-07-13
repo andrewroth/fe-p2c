@@ -1,6 +1,5 @@
 class Fe::Admin::QuestionPagesController < ApplicationController
   before_filter :check_valid_user
-  layout 'fe/fe.admin'
 
   before_filter :get_sheet
 
@@ -10,18 +9,18 @@ class Fe::Admin::QuestionPagesController < ApplicationController
     @page = @question_sheet.pages.find(params[:id])
     @elements = @page.elements
 
-    respond_to do |format|
-      format.js
-    end
+  #  respond_to do |format|
+  #    format.js
+  #  end
   end
 
   # GET /pages/1/edit
   def edit
     @page = @question_sheet.pages.find(params[:id])
 
-    respond_to do |format|
-      format.js
-    end
+  #  respond_to do |format|
+  #    format.js
+  #  end
   end
 
   # POST /pages
@@ -29,27 +28,27 @@ class Fe::Admin::QuestionPagesController < ApplicationController
     @page = @question_sheet.pages.build(:label => next_label, :number => @question_sheet.pages.length + 1)
     @all_pages = @question_sheet.pages
 
-    respond_to do |format|
-      if @page.save
-        format.js
-      else
-        format.js { render :action => "error.rjs"}
-      end
-    end
+  #  respond_to do |format|
+  #    if @page.save
+  #      format.js
+  #    else
+  #      format.js { render :action => "error.rjs"}
+  #    end
+  #  end
   end
 
   # PUT /pages/1
   def update
     @page = @question_sheet.pages.find(params[:id])
 
-    respond_to do |format|
-      if @page.update_attributes(page_params)
-        @all_pages = @question_sheet.pages
-        format.js { render action: :destroy }
-      else
-        format.js { render :action => "error.rjs"}
-      end
-    end
+  #  respond_to do |format|
+  #    if @page.update_attributes(page_params)
+  #      @all_pages = @question_sheet.pages
+  #      format.js { render action: :destroy }
+  #    else
+  #      format.js { render :action => "error.rjs"}
+  #    end
+  #  end
   end
 
   # DELETE /pages/1
@@ -61,9 +60,9 @@ class Fe::Admin::QuestionPagesController < ApplicationController
       @all_pages = @question_sheet.pages
       @page = @all_pages[0]
 
-      respond_to do |format|
-        format.js
-      end
+  #    respond_to do |format|
+  #      format.js
+  #    end
     end
   end
 
@@ -75,9 +74,9 @@ class Fe::Admin::QuestionPagesController < ApplicationController
     @all_pages = @question_sheet.pages  # for pages_list
     @page = @question_sheet.pages.find(params[:id])
 
-    respond_to do |format|
-      format.js # load panel
-    end
+#    respond_to do |format|
+#      format.js # load panel
+#    end
   end
 
   def reorder

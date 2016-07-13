@@ -16,15 +16,14 @@ class Fe::ReferenceSheetsController < Fe::AnswerSheetsController
     @presenter = Fe::AnswerPagesPresenter.new(self, @answer_sheet, params[:a])
     @elements = @presenter.questions_for_page(:first).elements
     @page = @presenter.pages.first
-    render 'fe/answer_sheets/edit', layout: 'fe/application'
   end
-  
+
   protected
     def get_answer_sheet
       @answer_sheet ||= Fe::ReferenceSheet.find_by_id_and_access_key(params[:id], params[:a])
       return false unless @answer_sheet
     end
-    
+
     def edit_only
       return false
     end

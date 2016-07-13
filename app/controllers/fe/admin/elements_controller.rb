@@ -1,6 +1,5 @@
 class Fe::Admin::ElementsController < ApplicationController
   before_filter :check_valid_user
-  layout 'fe/fe.admin'
 
   before_filter :get_page
 
@@ -14,9 +13,7 @@ class Fe::Admin::ElementsController < ApplicationController
       @questions_before_this = @page.questions_before_position(@element.position(@page))
     end
 
-    respond_to do |format|
-      format.js
-    end
+  #    format.js
   end
 
   def new
@@ -53,27 +50,23 @@ class Fe::Admin::ElementsController < ApplicationController
     @element.required = true if @element.question?
     @question_sheet = @page.question_sheet
 
-    respond_to do |format|
-      if @element.save
-        @page_element = Fe::PageElement.create(:element => @element, :page => @page)
-        format.js
-      else
-        format.js { render :action => 'error.js.erb' }
-      end
-    end
+  #    if @element.save
+  #      @page_element = Fe::PageElement.create(:element => @element, :page => @page)
+  #      format.js
+  #    else
+  #      format.js { render :action => 'error.js.erb' }
+  #    end
   end
 
   # PUT /elements/1
   def update
     @element = @page.all_elements.find(params[:id])
 
-    respond_to do |format|
-      if @element.update_attributes(element_params)
-        format.js
-      else
-        format.js { render :action => 'error.js.erb' }
-      end
-    end
+  #    if @element.update_attributes(element_params)
+  #      format.js
+  #    else
+  #      format.js { render :action => 'error.js.erb' }
+  #    end
   end
 
   # DELETE /elements/1
@@ -91,9 +84,9 @@ class Fe::Admin::ElementsController < ApplicationController
       @element.destroy
     end
 
-    respond_to do |format|
-      format.js
-    end
+  #  respond_to do |format|
+  #    format.js
+  #  end
   end
 
   def reorder
@@ -121,9 +114,9 @@ class Fe::Admin::ElementsController < ApplicationController
       end
     end
 
-    respond_to do |format|
-      format.js
-    end
+  #  respond_to do |format|
+  #    format.js
+  #  end
   end
 
   def drop
@@ -187,9 +180,9 @@ class Fe::Admin::ElementsController < ApplicationController
   def duplicate
     element = @page.all_elements.find(params[:id])
     @element = element.duplicate(@page, element.question_grid || element.question_grid_with_total || element.choice_field)
-    respond_to do |format|
-      format.js
-    end
+  #  respond_to do |format|
+  #    format.js
+  #  end
   end
 
   private

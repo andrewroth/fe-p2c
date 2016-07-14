@@ -15,26 +15,25 @@ module Fe::AnswerSheetsControllerConcern
 
     # drop down of sheets to capture data for
     @question_sheets = Fe::QuestionSheet.order('label').collect {|s| [s.label, s.id]}
+    render json: { answer_sheets: @answer_sheets, question_sheets: @question_sheets }
   end
 
   def create
     @question_sheet = Fe::QuestionSheet.find(params[:question_sheet_id])
     @answer_sheet = @question_sheet.answer_sheets.create
-
-    redirect_to edit_fe_answer_sheet_path(@answer_sheet)
+    render( { json: { answer_sheet: @answer_sheet } , status: :created } )
   end
 
   # display answer sheet for data capture (page 1)
   def edit
     @presenter = Fe::AnswerPagesPresenter.new(self, @answer_sheet, params[:a])
     unless @presenter.active_answer_sheet.pages.present?
-      flash[:error] = "Sorry, there are no questions for this form yet."
-      if request.env["HTTP_REFERER"]
-        redirect_to :back
-      end
+
+      render_error("No questions for this form.")
     else
       @elements = @presenter.questions_for_page(:first).elements
       @page = @presenter.pages.first
+      render json: {page: @page, elements: @elements}
     end
   end
 
@@ -46,6 +45,7 @@ module Fe::AnswerSheetsControllerConcern
     questions = Fe::QuestionSet.new(@elements, @answer_sheet)
     questions.set_filter(get_filter)
     @elements = questions.elements.group_by{ |e| e.pages.first }
+    render json: { answers: @elements }
   end
 
   def send_reference_invite(reference = nil)
@@ -62,8 +62,7 @@ module Fe::AnswerSheetsControllerConcern
 
   def submit
     return false unless validate_sheet
-    flash[:notice] = "Your form has been submitted. Thanks!"
-    redirect_to root_path
+    render_error("form submitted")
   end
 
   protected

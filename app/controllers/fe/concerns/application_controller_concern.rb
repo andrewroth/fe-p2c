@@ -45,3 +45,12 @@ module Fe::ApplicationControllerConcern
     end
   end
 end
+
+def render_error(message, options = {})
+  error_status = options[:status] || :bad_request  # 400
+  logger.info "render_error,#{Rack::Utils.status_code(error_status)},#{error_status},\"#{message}\""
+  render(
+      json: { error: message },
+      status: error_status
+  )
+end

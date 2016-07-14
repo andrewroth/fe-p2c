@@ -1,4 +1,4 @@
-module Fe::Admin::QuestionSheetsControllerConcern
+module Api::V1::Fe::Admin::QuestionSheetsControllerConcern
   extend ActiveSupport::Concern
 
   begin
@@ -20,29 +20,22 @@ module Fe::Admin::QuestionSheetsControllerConcern
 
   def archive
     @question_sheet.update_attribute(:archived, true)
-    redirect_to :back
+    render nothing: true
   end
 
   def unarchive
     @question_sheet.update_attribute(:archived, false)
-    redirect_to :back
+    render nothing: true
   end
 
   def duplicate
-    @question_sheet.duplicate
-    redirect_to :back
+    new_question_sheet = @question_sheet.duplicate
+    render json: new_question_sheet
   end
 
-  # entry point: display form designer with page 1 and panels loaded
   # GET /question_sheets/1
   def show
-    @all_pages = @question_sheet.pages
-    @page = @all_pages[0]
-
-#    respond_to do |format|
-#      format.html # show.rhtml
-#      format.xml  { render :xml => @question_sheet.to_xml }
-#    end
+    render json: @question_sheet
   end
 
   # create sheet with inital page, redirect to show

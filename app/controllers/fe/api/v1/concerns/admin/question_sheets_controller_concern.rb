@@ -15,11 +15,7 @@ module Fe::Admin::QuestionSheetsControllerConcern
     @active_question_sheets = Fe::QuestionSheet.active.order('label')
     @archived_question_sheets = Fe::QuestionSheet.archived.order('label')
 
-    render json: { it: 'works!' }
-    #respond_to do |format|
-    #  format.html # index.rhtml
-    #  format.xml  { render :xml => @question_sheets.to_xml }
-    #end
+    render json: { active: @active_question_sheets, archived: @archived_question_sheets }
   end
 
   def archive

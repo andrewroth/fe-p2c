@@ -34,3 +34,5 @@ group :development, :test do
 end
 
 gem 'database_cleaner'
+
+gem 'active_model_serializers'

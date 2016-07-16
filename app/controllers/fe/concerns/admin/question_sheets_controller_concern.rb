@@ -1,4 +1,4 @@
-module Api::V1::Fe::Admin::QuestionSheetsControllerConcern
+module Fe::Admin::QuestionSheetsControllerConcern
   extend ActiveSupport::Concern
 
   begin

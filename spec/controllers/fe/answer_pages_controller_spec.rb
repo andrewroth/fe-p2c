@@ -40,43 +40,44 @@ describe Fe::AnswerPagesController, type: :controller do
   end
 
   context '#update' do
-    it 'should work' do
-      answer_sheet = create(:answer_sheet)
-      page = create(:page)
-      question_sheet = page.question_sheet
+    let(:answer_sheet) { create(:answer_sheet) }
+    let(:page) { create(:page) }
+    let(:question_sheet) { question_sheet = page.question_sheet }
+    let(:element) { create(:text_field_element) }
+
+    before do
       create(:answer_sheet_question_sheet, answer_sheet: answer_sheet, question_sheet: question_sheet)
-      element = create(:text_field_element)
       create(:page_element, element: element, page: page)
+    end
+
+    it 'should work' do
       # ref
       reference_question = create(:reference_question)
       reference_sheet = create(:reference_sheet, applicant_answer_sheet_id: answer_sheet.id, email: 'initial@ref.com')
 
-      xhr :put, :update, {
-        answers: { "#{element.id}" => 'answer here' },
-        reference: { "#{reference_sheet.id}" => {
-          relationship: 'roommate',
-          title: 'A',
-          first_name: 'FN',
-          last_name: 'LN',
-          phone: 'phone',
-          email: 'email@reference.com'
-        } },
-        id: page.id,
-        answer_sheet_id: answer_sheet.id
-      }
+      expect {
+        xhr :put, :update, {
+          answers: { "#{element.id}" => 'answer here' },
+          reference: { "#{reference_sheet.id}" => {
+            relationship: 'roommate',
+            title: 'A',
+            first_name: 'FN',
+            last_name: 'LN',
+            phone: 'phone',
+            email: 'email@reference.com'
+          } },
+          id: page.id,
+          answer_sheet_id: answer_sheet.id
+        }
+      }.to have_enqueued_job(Fe::UpdateReferenceSheetVisibilityJob)
 
       expect(response).to render_template('fe/answer_pages/update')
       expect(Fe::Answer.find_by(answer_sheet_id: answer_sheet.id, question_id: element.id).value).to eq('answer here')
       expect(reference_sheet.reload.email).to eq('email@reference.com')
     end
+
     it 'should store a reference sheet answer' do
       # create a normal applicant sheet to make sure the answer isn't saved to that
-      answer_sheet = create(:answer_sheet)
-      page = create(:page)
-      question_sheet = page.question_sheet
-      create(:answer_sheet_question_sheet, answer_sheet: answer_sheet, question_sheet: question_sheet)
-      element = create(:text_field_element)
-      create(:page_element, element: element, page: page)
       # ref
       ref_page = create(:page, label: 'Ref Page')
       ref_question_sheet = ref_page.question_sheet
@@ -99,6 +100,33 @@ describe Fe::AnswerPagesController, type: :controller do
       expect(reference_sheet.reload.answers.collect(&:value)).to eq(['ref answer here'])
       expect(answer_sheet.reload.answers).to eq([])
     end
-  end
+    context 'when filling out a reference' do
+      it 'should not reset the reference even when the email changes' do
+        # ref
+        ref_page = create(:page, label: 'Ref Page')
+        ref_question_sheet = ref_page.question_sheet
+        ref_element = create(:text_field_element, object_name: 'answer_sheet', attribute_name: 'email')
+        create(:page_element, element: ref_element, page: ref_page)
+        reference_question = create(:reference_question, related_question_sheet_id: ref_question_sheet.id)
+        reference_sheet = create(:reference_sheet, question_id: reference_question.id, applicant_answer_sheet_id: answer_sheet.id, email: 'initial@ref.com')
+        reference_sheet.generate_access_key
+        reference_sheet.save!
+        key_before = reference_sheet.access_key
 
+        xhr :put, :update, {
+          answers: { "#{ref_element.id}" => 'other@email.com' },
+          id: ref_page.id,
+          answer_sheet_id: reference_sheet.id,
+          answer_sheet_type: 'Fe::ReferenceSheet',
+          a: reference_sheet.access_key
+        }
+
+        expect(response).to render_template('fe/answer_pages/update')
+        reference_sheet.reload
+        expect(reference_sheet.email).to eq('other@email.com')
+        # make sure the access key isn't reset
+        expect(reference_sheet.access_key).to eq(key_before)
+      end
+    end
+  end
 end

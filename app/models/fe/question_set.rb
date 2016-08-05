@@ -3,26 +3,18 @@
 module Fe
   class QuestionSet
 
-    attr_reader :elements
+    attr_reader :elements, :questions
 
     # associate answers from database with a set of elements
     def initialize(elements, answer_sheet)
       @elements = elements
       @answer_sheet = answer_sheet
-
       @questions = elements.select { |e| e.question? }
-
-      # answers = @answer_sheet.answers_by_question
-
-      @questions.each do |question|
-        question.answers = question.responses(answer_sheet) #answers[question.id]
-      end
-      @questions
     end
 
     # update with responses from form
     def post(params, answer_sheet)
-      questions_indexed = @questions.index_by {|q| q.id}
+      questions_indexed = @questions.index_by(&:id)
 
       # loop over form values
       params ||= {}
@@ -122,6 +114,5 @@ module Fe
       # Hash may contain empty string to force post for no checkboxes
   #    values = values.reject {|r| r == ''}
     end
-
   end
 end

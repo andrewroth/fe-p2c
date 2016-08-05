@@ -416,6 +416,10 @@
     remaining = maxlength - $(this).val().length;
     $('#'+$(this).attr('id')+'_count').val(remaining);
   });
+
+  $(document).on('click', 'a[disabled]', function(event) {
+    event.preventDefault();
+  });
 })(jQuery);
 
 $(function() {
@@ -428,7 +432,7 @@ function updateTotal(id) {
   try {
     total = 0;
     $(".col_" + id).each(function(index, el) {
-      total += Number($(el).val());
+      total += Number($(el).val().replace(',',''));
     });
     $('#total_' + id).val(total).trigger('totalChanged');
   } catch(e) {

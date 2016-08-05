@@ -29,6 +29,7 @@ module Fe
     scope :questions, -> { where("kind NOT IN('Fe::Paragraph', 'Fe::Section', 'Fe::QuestionGrid', 'Fe::QuestionGridWithTotal')") }
     scope :shared, -> { where(share: true) }
     scope :grid_kinds, -> { where(kind: ['Fe::QuestionGrid', 'Fe::QuestionGridWithTotal']) }
+    scope :reference_kinds, -> { where(kind: 'Fe::ReferenceQuestion') }
 
     validates_presence_of :kind
     validates_presence_of :style
@@ -118,8 +119,32 @@ module Fe
       end
     end
 
+    # return an array of all elements whose answers or visibility might affect
+    # the visibility of this element
+    def visibility_affecting_element_ids
+      return @visibility_affecting_element_ids if @visibility_affecting_element_ids
+
+      # the form doesn't change much so caching on the last updated element will
+      # provide a good balance of speed and cache invalidation
+      Rails.cache.fetch([self, 'element#visibility_affecting_element_ids', Fe::Element.order('updated_at desc, id desc').first]) do
+        elements = []
+
+        elements << question_grid if question_grid
+        elements << choice_field if choice_field
+        elements += Fe::Element.where(conditional_type: 'Fe::Element', conditional_id: id)
+        element_ids = elements.collect(&:id) +
+          elements.collect { |e| e.visibility_affecting_element_ids }.flatten
+        element_ids.uniq
+      end
+    end
+
+    def visibility_affecting_questions
+      Fe::Question.where(id: visibility_affecting_element_ids)
+    end
+
     def hidden_by_conditional?(answer_sheet, page)
-      prev_el = previous_element(answer_sheet.question_sheet, page)
+      return false unless answer_sheet.question_sheets.include?(page.question_sheet)
+      prev_el = previous_element(page.question_sheet, page)
       prev_el.is_a?(Fe::Question) &&
         prev_el.conditional == self &&
         !prev_el.conditional_match(answer_sheet)
@@ -138,8 +163,8 @@ module Fe
 
     # use page if it's passed in, otherwise it will revert to the first page in answer_sheet
     def hidden?(answer_sheet = nil, page = nil)
-      page ||= pages_on.detect{ |p| p.question_sheet == answer_sheet.question_sheet }
-      return true if page.hidden?(answer_sheet)
+      page ||= pages_on.detect{ |p| answer_sheet.question_sheets.include?(p.question_sheet) }
+      return true if !page || page.hidden?(answer_sheet)
       return page.all_hidden_elements(answer_sheet).include?(self)
     end
 

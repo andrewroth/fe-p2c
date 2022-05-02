@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'rails', '~> 4.2'
   s.add_dependency 'acts_as_list', '= 0.7.2'
-  s.add_dependency 'aasm', '~> 3.4.0'
+  s.add_dependency 'aasm', '~> 5.2.0'
   s.add_dependency 'jquery-rails'
   s.add_dependency 'jquery-ui-rails'
   s.add_dependency 'dynamic_form'

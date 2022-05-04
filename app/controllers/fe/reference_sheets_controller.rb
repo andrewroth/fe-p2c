@@ -2,7 +2,7 @@
 class Fe::ReferenceSheetsController < Fe::AnswerSheetsController
   #skip_before_filter :ssm_login_required, :login
   skip_before_filter :login
-  before_filter :edit_only, :except => [:edit]
+  before_action :edit_only, :except => [:edit]
 
   def edit
     @reference_sheet = @answer_sheet
@@ -19,13 +19,13 @@ class Fe::ReferenceSheetsController < Fe::AnswerSheetsController
     @page = @presenter.pages.first
     render 'fe/answer_sheets/edit', layout: 'fe/application'
   end
-  
+
   protected
     def get_answer_sheet
       @answer_sheet ||= Fe::ReferenceSheet.find_by_id_and_access_key(params[:id], params[:a])
       return false unless @answer_sheet
     end
-    
+
     def edit_only
       return false
     end

@@ -17,12 +17,12 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency 'rails', '~> 6.1.4.7'
-  s.add_dependency 'acts_as_list', '= 0.7.2'
+  s.add_dependency 'acts_as_list', '= 1.0.4'
   s.add_dependency 'aasm', '~> 5.2.0'
   s.add_dependency 'jquery-rails'
   s.add_dependency 'jquery-ui-rails'
   s.add_dependency 'dynamic_form'
-  s.add_dependency 'carmen', '~> 0.2.12'
+  s.add_dependency 'carmen', '~> 0.2.13'
   s.add_dependency 'validates_email_format_of'
   s.add_dependency 'liquid'
   s.add_dependency 'sass'

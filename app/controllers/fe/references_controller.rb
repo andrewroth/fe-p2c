@@ -2,8 +2,8 @@
 # TODO determine how this relates to Fe::ReferenceSheetsController and if we can delete one of the two
 module Fe
   class ReferencesController < ApplicationController
-    skip_before_action :cas_filter
-    skip_before_action :authentication_filter
+    skip_before_filter :cas_filter
+    skip_before_filter :authentication_filter
 
     before_action :setup
 

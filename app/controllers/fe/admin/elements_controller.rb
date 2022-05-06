@@ -1,8 +1,8 @@
 class Fe::Admin::ElementsController < ApplicationController
-  before_filter :check_valid_user
+  before_action :check_valid_user
   layout 'fe/fe.admin'
 
-  before_filter :get_page
+  before_action :get_page
 
   # GET /element/1/edit
   def edit
@@ -98,7 +98,7 @@ class Fe::Admin::ElementsController < ApplicationController
 
   def reorder
     # since we don't know the name of the list, just find the first param that is an array
-    params.each_key do |key|
+    params.keys.each do |key|
       if key.include?('questions_list')
         grid_id = key.sub('questions_list_', '').to_i
         # See if we're ordering inside of a grid

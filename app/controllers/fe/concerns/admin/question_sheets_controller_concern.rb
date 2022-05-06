@@ -3,8 +3,8 @@ module Fe::Admin::QuestionSheetsControllerConcern
 
   begin
     included do
-      before_filter :check_valid_user
-      before_filter :get_question_sheet, :only => [:show, :archive, :unarchive, :destroy, :edit, :update, :duplicate]
+      before_action :check_valid_user
+      before_action :get_question_sheet, :only => [:show, :archive, :unarchive, :destroy, :edit, :update, :duplicate]
       layout 'fe/fe.admin'
     end
   rescue ActiveSupport::Concern::MultipleIncludedBlocks
@@ -24,17 +24,17 @@ module Fe::Admin::QuestionSheetsControllerConcern
 
   def archive
     @question_sheet.update_attribute(:archived, true)
-    redirect_to :back
+    redirect_back fallback_location: fe_admin_question_sheets_path
   end
 
   def unarchive
     @question_sheet.update_attribute(:archived, false)
-    redirect_to :back
+    redirect_back fallback_location: fe_admin_question_sheets_path
   end
 
   def duplicate
     @question_sheet.duplicate
-    redirect_to :back
+    redirect_back fallback_location: fe_admin_question_sheets_path
   end
 
   # entry point: display form designer with page 1 and panels loaded
@@ -109,4 +109,3 @@ module Fe::Admin::QuestionSheetsControllerConcern
     @question_sheet = Fe::QuestionSheet.find(params[:id])
   end
 end
-
